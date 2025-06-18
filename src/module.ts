@@ -23,7 +23,7 @@ export interface ModuleOptions {
 
 export default defineNuxtModule<ModuleOptions>({
   meta: {
-    name: 'simple-cookie-consent',
+    name: 'nuxt-simple-cookie-consent',
     configKey: 'cookieConsent',
   },
   defaults: {
