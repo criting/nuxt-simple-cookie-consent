@@ -1,44 +1,114 @@
-<!--
-Get your module up and running quickly.
-
-Find and replace all on all files (CMD+SHIFT+F):
-- Name: My Module
-- Package name: my-module
-- Description: My new Nuxt module
--->
-
-# My Module
+# 🍪 nuxt-simple-cookie-consent
 
 [![npm version][npm-version-src]][npm-version-href]
 [![npm downloads][npm-downloads-src]][npm-downloads-href]
 [![License][license-src]][license-href]
 [![Nuxt][nuxt-src]][nuxt-href]
 
-My new Nuxt module for doing amazing things.
+A simple, headless, and fully customizable cookie consent module for Nuxt 3.  
+Built for developers who want full control over styling and behavior, without relying on bloated third-party libraries.
+
+> ⚠️ **Warning:** This module is currently under active development and **not production-ready**.  
+> Use at your own risk. APIs may change as the module evolves.
 
 - [✨ &nbsp;Release Notes](/CHANGELOG.md)
 <!-- - [🏀 Online playground](https://stackblitz.com/github/your-org/my-module?file=playground%2Fapp.vue) -->
 <!-- - [📖 &nbsp;Documentation](https://example.com) -->
 
-## Features
+## 🚀 Features
 
 <!-- Highlight some of the features your module provide here -->
-- ⛰ &nbsp;Foo
-- 🚠 &nbsp;Bar
-- 🌲 &nbsp;Baz
+- ✅ Headless design — you control all UI/UX
+- ✅ Group scripts into categories (analytics, ads, etc.)
+- ✅ Scripts only run after user consents
+- ✅ Accept all, deny all, or select categories
+- ✅ Reactive `useCookieConsent()` composable
+- ✅ Auto-injection and removal of scripts
 
-## Quick Setup
+## 📦 Installation
 
 Install the module to your Nuxt application with one command:
 
 ```bash
-npx nuxi module add my-module
+npm install nuxt-simple-cookie-consent
 ```
 
-That's it! You can now use My Module in your Nuxt app ✨
+That's it! You can now use nuxt-simple-cookie-consent in your Nuxt app ✨
 
+```ts
+export default defineNuxtConfig({
+  modules: ['nuxt-simple-cookie-consent'],
+  cookieConsent: {
+    categories: {
+      analytics: {
+        label: 'Analytics',
+        description: 'Used to collect anonymous usage statistics.'
+      },
+      ads: {
+        label: 'Advertising',
+        description: 'Used to serve personalized ads.'
+      }
+    },
+    scripts: {
+      analytics: [
+        {
+          id: 'ga',
+          src: 'https://www.googletagmanager.com/gtag/js?id=GA_ID',
+        }
+      ]
+    }
+  }
+})
+```
 
-## Contribution
+## Usage
+
+Use the built-in composable to build your own cookie banner, modal, or settings panel:
+
+```ts
+const {
+  preferences,
+  categoryMeta,
+  updatePreferences,
+  acceptAll,
+  denyAll,
+  acceptCategories,
+  hasUserMadeChoice
+} = useCookieConsent()
+```
+
+Build your UI using Nuxt UI, Tailwind, or anything else.  
+Preferences are fully reactive and changes are immediately reflected.
+You can find example in the playground with Nuxt UI!
+
+## 📌 Why Another Cookie Module?
+
+Other modules are:
+
+- ❌ Too opinionated on UI
+- ❌ Too complex to configure
+- ❌ Not reactive or dynamic enough
+
+This one gives you **just the logic** — you handle the rest with your own design system and UX.
+Well, of course you will get a full working examples, no need to pressure yourself!
+
+## 🛠 Planned Features
+
+- [x] Script injection/removal based on category
+- [ ] Post-load callbacks
+- [ ] Required categories (`required: true`)
+- [ ] Consent expiration / auto-renew prompt
+- [ ] DevTools integration
+- [ ] Built-in helpers for common script types
+- [ ] SSR-safe inline script support
+
+## 🙏 Contributing
+
+Pull requests, issues, and suggestions are welcome!
+
+If you find a bug or want to propose a feature, open an issue or a PR.
+
+> ⚠️ This module is still **in development** — expect breaking changes until stable release.
 
 <details>
   <summary>Local development</summary>

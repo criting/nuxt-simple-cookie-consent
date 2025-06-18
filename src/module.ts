@@ -1,19 +1,45 @@
-import { defineNuxtModule, addPlugin, createResolver } from '@nuxt/kit'
+// module.ts
+import { defineNuxtModule, addPlugin, createResolver, addImportsDir } from '@nuxt/kit'
 
-// Module options TypeScript interface definition
-export interface ModuleOptions {}
+export interface CookieConsentCategory {
+  label: string
+  description?: string
+}
+
+export interface CookieScript {
+  id: string
+  src: string
+  async?: boolean
+  defer?: boolean
+  type?: string
+  customContent?: string
+}
+
+export interface ModuleOptions {
+  categories: Record<string, CookieConsentCategory>
+  scripts: Record<string, CookieScript[]>
+  cookieName?: string
+}
 
 export default defineNuxtModule<ModuleOptions>({
   meta: {
-    name: 'my-module',
-    configKey: 'myModule',
+    name: 'simple-cookie-consent',
+    configKey: 'cookieConsent',
   },
-  // Default configuration options of the Nuxt module
-  defaults: {},
-  setup(_options, _nuxt) {
+  defaults: {
+    categories: {},
+    scripts: {},
+    cookieName: 'cookie_consent',
+  },
+  setup(options, nuxt) {
     const resolver = createResolver(import.meta.url)
 
-    // Do not add the extension since the `.ts` will be transpiled to `.mjs` after `npm run prepack`
-    addPlugin(resolver.resolve('./runtime/plugin'))
+    nuxt.options.runtimeConfig.public.cookieConsent = {
+      ...options,
+      cookieName: options.cookieName ?? 'cookie_consent',
+    }
+
+    addImportsDir(resolver.resolve('runtime/composables'))
+    addPlugin(resolver.resolve('runtime/plugin'))
   },
 })
