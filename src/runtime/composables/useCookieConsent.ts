@@ -21,9 +21,19 @@ export function useCookieConsent() {
   const config = useRuntimeConfig().public.cookieConsent as {
     cookieName?: string
     categories: Record<string, CookieConsentCategory>
-    scripts?: Record<string, CookieScript[]>
+    scripts?: Record<string, CookieScript[]>,
+    expiresInDays?: number
   }
   const cookieName = config.cookieName || 'cookie_consent'
+
+  const consentTimestamp = useCookie<number | null>('cookie_consent_timestamp')
+  const expiresInMs = (config.expiresInDays ?? 180) * 24 * 60 * 60 * 1000
+
+  const isConsentExpired = computed(() => {
+    return consentTimestamp.value
+      ? Date.now() - consentTimestamp.value > expiresInMs
+      : false
+  })
 
   const state = useState<Record<string, boolean>>('cookieConsent', () => {
     return useCookie<Record<string, boolean>>(cookieName).value || {}
@@ -72,6 +82,8 @@ export function useCookieConsent() {
     }
 
     state.value = updated
+    useCookie(cookieName).value = JSON.stringify(updated)
+    useCookie('cookie_consent_timestamp').value = Date.now().toString()
 
     for (const [category, accepted] of Object.entries(updated)) {
       const scripts = config.scripts?.[category] || []
@@ -100,5 +112,7 @@ export function useCookieConsent() {
     updatePreferences,
     resetPreferences,
     hasUserMadeChoice,
+    consentTimestamp,
+    isConsentExpired
   }
 }

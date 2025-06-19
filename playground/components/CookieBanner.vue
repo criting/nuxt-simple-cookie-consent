@@ -3,9 +3,12 @@ const {
   acceptAll,
   denyAll,
   hasUserMadeChoice,
+  isConsentExpired,
 } = useCookieConsent()
 
-const showBanner = computed(() => !hasUserMadeChoice.value)
+const showBanner = computed(() =>
+  !hasUserMadeChoice.value || isConsentExpired.value
+)
 const emit = defineEmits(['open-modal'])
 
 function handleOpenModal() {
@@ -24,6 +27,7 @@ function handleDeny() {
 </script>
 
 <template>
+  <p v-if="isConsentExpired">Your cookie preferences have expired. Please review them again.</p>
   <div
     v-if="showBanner"
     class="fixed bottom-4 left-4 right-4 bg-white dark:bg-neutral-900 p-4 rounded-xl shadow-xl z-50 flex flex-col md:flex-row justify-between items-start gap-4"
