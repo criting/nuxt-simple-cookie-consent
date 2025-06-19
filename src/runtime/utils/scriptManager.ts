@@ -1,16 +1,7 @@
+import type { CookieScript } from '../../types/cookies'
 import { emitCookieConsentEvent } from '../composables/cookieConsentEvents'
 
-type ScriptConfig = {
-  id: string
-  src?: string
-  async?: boolean
-  defer?: boolean
-  type?: string
-  customContent?: string
-  categories: string[]
-}
-
-export function injectScripts(scripts: ScriptConfig[], acceptedCategories: Record<string, boolean>) {
+export function injectScripts(scripts: CookieScript[], acceptedCategories: Record<string, boolean>) {
   const injected = new Set<string>()
   const injectedCategories = new Set<string>()
 
@@ -30,7 +21,22 @@ export function injectScripts(scripts: ScriptConfig[], acceptedCategories: Recor
     el.type = script.type ?? 'text/javascript'
 
     if (script.customContent) {
-      el.innerHTML = script.customContent
+      const inline = document.createElement('script')
+      inline.id = `cookie-script-inline-${script.id}`
+      inline.setAttribute('data-type', 'gdpr')
+      inline.setAttribute('data-categories', script.categories.join(','))
+      inline.type = 'text/javascript'
+      inline.innerHTML = script.customContent
+      document.head.appendChild(inline)
+    }
+
+    if (script.customHTML) {
+      const container = document.createElement('div')
+      container.id = `cookie-html-${script.id}`
+      container.setAttribute('data-type', 'gdpr')
+      container.setAttribute('data-categories', script.categories.join(','))
+      container.innerHTML = script.customHTML
+      document.body.appendChild(container)
     }
 
     document.head.appendChild(el)
