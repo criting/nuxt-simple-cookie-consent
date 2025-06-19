@@ -45,14 +45,20 @@ export default defineNuxtConfig({
         description: 'Used to serve personalized ads.'
       }
     },
-    scripts: {
-      analytics: [
-        {
-          id: 'ga',
-          src: 'https://www.googletagmanager.com/gtag/js?id=GA_ID',
-        }
-      ]
-    }
+    scripts: [
+      {
+        id: 'ga',
+        src: 'https://www.googletagmanager.com/gtag/js?id=GA_ID',
+        async: true,
+        defer: true,
+        categories: ['analytics', 'advertising'],
+      },
+      {
+        id: 'ads',
+        src: 'https://ads.example.com/script.js',
+        categories: ['advertising'],
+      },
+    ],
   }
 })
 ```
@@ -89,7 +95,7 @@ This one gives you **just the logic** — you handle the rest with your own desi
 Well, of course you will get a full working examples, no need to pressure yourself!
 
 ## 🛠 Planned Features
-
+- [x] Support multiple categories
 - [x] Script injection/removal based on category
 - [ ] Post-load callbacks
 - [x] Required categories (`required: true`)

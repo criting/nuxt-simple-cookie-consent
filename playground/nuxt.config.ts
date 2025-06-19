@@ -13,26 +13,26 @@ export default defineNuxtConfig({
       analytics: {
         label: 'Analytics',
         description: 'Used to improve website performance.',
-        required: true,
+        required: false,
       },
       ads: {
         label: 'Advertisement',
         description: 'Used for ad personalization.',
       },
     },
-    scripts: {
-      analytics: [
-        {
-          id: 'ga',
-          src: 'https://www.googletagmanager.com/gtag/js?id=GA_ID',
-        },
-      ],
-      ads: [
-        {
-          id: 'ads',
-          src: 'https://ads.example.com/script.js',
-        },
-      ],
-    },
+    scripts: [
+      {
+        id: 'ga',
+        src: 'https://www.googletagmanager.com/gtag/js?id=GA_ID',
+        async: true,
+        defer: true,
+        categories: ['analytics', 'ads'],
+      },
+      {
+        id: 'ads',
+        src: 'https://ads.example.com/script.js',
+        categories: ['ads'],
+      },
+    ],
   },
 })

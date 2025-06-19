@@ -5,39 +5,45 @@ type ScriptConfig = {
   defer?: boolean
   type?: string
   customContent?: string
+  categories: string[]
 }
 
-export function injectScripts(category: string, scripts: ScriptConfig[]) {
-  // First, remove existing GDPR scripts
-  const scriptsToRemove = document.querySelectorAll<HTMLScriptElement>(`script[data-type="gdpr"]`)
-  scriptsToRemove.forEach((el) => {
-    el.remove()
-  })
+export function injectScripts(scripts: ScriptConfig[], acceptedCategories: Record<string, boolean>) {
+  const injected = new Set<string>()
 
-  queueMicrotask(() => {
-    for (const script of scripts) {
-      const el = document.createElement('script')
-      el.id = `cookie-script-${script.id}`
-      el.setAttribute('data-type', 'gdpr')
-      el.setAttribute('data-category', category)
-      el.src = script.src || ''
-      el.async = script.async ?? true
-      el.defer = script.defer ?? false
-      el.type = script.type ?? 'text/javascript'
+  for (const script of scripts) {
+    if (!script.categories.some(cat => acceptedCategories[cat])) continue
 
-      if (script.customContent) {
-        el.innerHTML = script.customContent
-      }
+    if (document.getElementById(`cookie-script-${script.id}`)) continue
+    if (injected.has(script.id)) continue
 
-      document.head.appendChild(el)
+    const el = document.createElement('script')
+    el.id = `cookie-script-${script.id}`
+    el.setAttribute('data-type', 'gdpr')
+    el.setAttribute('data-categories', script.categories.join(','))
+    el.src = script.src || ''
+    el.async = script.async ?? true
+    el.defer = script.defer ?? false
+    el.type = script.type ?? 'text/javascript'
+
+    if (script.customContent) {
+      el.innerHTML = script.customContent
     }
-  })
+
+    document.head.appendChild(el)
+    injected.add(script.id)
+  }
 }
 
-export function removeScripts(category: string) {
-  const scripts = document.querySelectorAll<HTMLScriptElement>(`script[data-category="${category}"]`)
+export function removeScripts(acceptedCategories: Record<string, boolean>) {
+  const allScripts = document.querySelectorAll<HTMLScriptElement>('script[data-type="gdpr"]')
 
-  scripts.forEach((el) => {
-    el.remove()
+  allScripts.forEach((el) => {
+    const categories = (el.getAttribute('data-categories') || '').split(',')
+    const stillAllowed = categories.some(cat => acceptedCategories[cat])
+
+    if (!stillAllowed) {
+      el.remove()
+    }
   })
 }

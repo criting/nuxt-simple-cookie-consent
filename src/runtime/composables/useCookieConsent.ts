@@ -1,27 +1,13 @@
+import type { CookieConsentCategory, CookieScript } from '../../types/cookies'
 import { injectScripts, removeScripts } from '../utils/scriptManager'
 import { useCookie, useRuntimeConfig, useState } from '#app'
 import { computed } from '#imports'
-
-export interface CookieConsentCategory {
-  label: string
-  description?: string
-  required?: boolean
-}
-
-export interface CookieScript {
-  id: string
-  src: string
-  async?: boolean
-  defer?: boolean
-  type?: string
-  customContent?: string
-}
 
 export function useCookieConsent() {
   const config = useRuntimeConfig().public.cookieConsent as {
     cookieName?: string
     categories: Record<string, CookieConsentCategory>
-    scripts?: Record<string, CookieScript[]>
+    scripts?: CookieScript[]
     expiresInDays?: number
   }
   const cookieName = config.cookieName || 'cookie_consent'
@@ -85,15 +71,9 @@ export function useCookieConsent() {
     useCookie(cookieName).value = JSON.stringify(updated)
     useCookie('cookie_consent_timestamp').value = Date.now().toString()
 
-    for (const [category, accepted] of Object.entries(updated)) {
-      const scripts = config.scripts?.[category] || []
-
-      if (accepted) {
-        injectScripts(category, scripts)
-      }
-      else {
-        removeScripts(category)
-      }
+    if (import.meta.client && Array.isArray(config.scripts)) {
+      removeScripts(updated)
+      injectScripts(config.scripts, updated)
     }
   }
 
