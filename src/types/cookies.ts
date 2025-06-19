@@ -11,5 +11,6 @@ export interface CookieScript {
   defer?: boolean
   type?: string
   customContent?: string
+  customHTML?: string
   categories: string[]
 }
