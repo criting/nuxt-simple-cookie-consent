@@ -104,6 +104,7 @@ Well, of course you will get a full working examples, no need to pressure yourse
 - [ ] Built-in helpers for common script types
 - [ ] SSR-safe inline script support
 - [x] Events (`onConsentAccepted, onConsentDenied, onCategoryAccepted, onScriptsInjected, onScriptsRemoved`)
+- [x] Consent Versioning
 
 ## 🙏 Contributing
 

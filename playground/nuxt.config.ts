@@ -8,6 +8,7 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-03-24',
   cookieConsent: {
     expiresInDays: 180,
+    consentVersion: '1.0.0',
     cookieName: 'cookie_consent',
     categories: {
       analytics: {
