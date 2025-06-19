@@ -1,6 +1,6 @@
 {
   "name": "nuxt-simple-cookie-consent",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "A lightweight, headless Nuxt 3 module for managing GDPR-compliant cookie consent — with full control over categories, script injection, and UI.",
   "repository": "https://github.com/criting/nuxt-simple-cookie-consent.git",
   "license": "MIT",
