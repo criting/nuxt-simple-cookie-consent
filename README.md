@@ -14,12 +14,24 @@ Built for developers who want full control over styling and behavior, without re
 ## 🚀 Features
 
 <!-- Highlight some of the features your module provide here -->
-- ✅ Headless design — you control all UI/UX
-- ✅ Group scripts into categories (analytics, ads, etc.)
-- ✅ Scripts only run after user consents
-- ✅ Accept all, deny all, or select categories
-- ✅ Reactive `useCookieConsent()` composable
-- ✅ Auto-injection and removal of scripts
+- ✅ **Headless design** – Full control over all UI/UX. The module only provides logic and script handling.
+- ✅ **Group scripts into multiple categories** – Organize by purpose (e.g., `analytics`, `ads`, or both).
+- ✅ **Required categories** – Mark categories as `required: true` to always enable them and prevent opt-out.
+- ✅ **Reactive `useCookieConsent()` composable** – Easily track consent preferences, expiration, and control flow in your app.
+- ✅ **Auto-injection and removal of scripts** – Scripts are dynamically injected or removed based on real-time user preferences.
+- ✅ **Support for multi-category scripts** – A script can belong to multiple categories (e.g., both `ads` and `analytics`).
+- ✅ **Consent expiration** – Automatically expire and re-prompt user consent after a configured number of days.
+- ✅ **Consent versioning** – Force a new prompt if your policy has changed (version mismatch).
+- ✅ **SSR-safe script control** – Scripts are only injected client-side using `import.meta.client`, avoiding SSR issues.
+- ✅ **Post-load callbacks** – Easily initialize tools like Google Tag Manager or Facebook Pixel after consent is given.
+- ✅ **Inline & pixel tag support** – Supports `<script>`, `<iframe>`, or custom HTML as part of your cookie configuration.
+- ✅ **Event lifecycle hooks** – Listen to key events like:
+  - `onConsentAccepted`
+  - `onConsentDenied`
+  - `onCategoryAccepted(category)`
+  - `onScriptsInjected(category)`
+  - `onScriptsRemoved(category)`
+- ✅ **Built-in dev helpers** – Debug logging, timestamp tracking, `resetPreferences()` and more.
 
 ## 📦 Installation
 
