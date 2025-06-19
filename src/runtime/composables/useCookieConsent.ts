@@ -21,7 +21,7 @@ export function useCookieConsent() {
   const config = useRuntimeConfig().public.cookieConsent as {
     cookieName?: string
     categories: Record<string, CookieConsentCategory>
-    scripts?: Record<string, CookieScript[]>,
+    scripts?: Record<string, CookieScript[]>
     expiresInDays?: number
   }
   const cookieName = config.cookieName || 'cookie_consent'
@@ -113,6 +113,6 @@ export function useCookieConsent() {
     resetPreferences,
     hasUserMadeChoice,
     consentTimestamp,
-    isConsentExpired
+    isConsentExpired,
   }
 }

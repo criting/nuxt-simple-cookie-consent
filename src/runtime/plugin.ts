@@ -1,6 +1,5 @@
 import { injectScripts } from './utils/scriptManager'
 import { defineNuxtPlugin, useCookie, useRuntimeConfig, useState } from '#app'
-import { watchEffect } from '#imports'
 
 type ScriptConfig = {
   id: string
@@ -21,7 +20,7 @@ export default defineNuxtPlugin(() => {
   const config = useRuntimeConfig().public.cookieConsent as {
     cookieName?: string
     categories: Record<string, unknown>
-    scripts?: Record<string, ScriptConfig[]>,
+    scripts?: Record<string, ScriptConfig[]>
     expiresInDays?: number
   }
   const cookieName = config.cookieName || 'cookie_consent'

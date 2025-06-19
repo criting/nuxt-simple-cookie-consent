@@ -19,7 +19,7 @@ export interface CookieScript {
 export interface ModuleOptions {
   categories: Record<string, CookieConsentCategory>
   scripts: Record<string, CookieScript[]>
-  cookieName?: string,
+  cookieName?: string
   expiresInDays?: number
 }
 
