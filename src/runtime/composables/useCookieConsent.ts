@@ -1,5 +1,10 @@
 import type { CookieConsentCategory, CookieScript } from '../../types/cookies'
 import { injectScripts, removeScripts } from '../utils/scriptManager'
+import { onConsentAccepted,
+  onConsentDenied,
+  onCategoryAccepted,
+  onScriptsInjected,
+  onScriptsRemoved, emitCookieConsentEvent } from '../composables/cookieConsentEvents'
 import { useCookie, useRuntimeConfig, useState } from '#app'
 import { computed } from '#imports'
 
@@ -38,6 +43,7 @@ export function useCookieConsent() {
       return acc
     }, {} as Record<string, boolean>)
     updatePreferences(all)
+    emitCookieConsentEvent({ type: 'consentAccepted' })
   }
 
   function denyAll() {
@@ -47,6 +53,7 @@ export function useCookieConsent() {
     }, {} as Record<string, boolean>)
 
     updatePreferences(denied)
+    emitCookieConsentEvent({ type: 'consentDenied' })
   }
 
   function acceptCategories(categories: string[]) {
@@ -94,5 +101,10 @@ export function useCookieConsent() {
     hasUserMadeChoice,
     consentTimestamp,
     isConsentExpired,
+    onConsentAccepted,
+    onConsentDenied,
+    onCategoryAccepted,
+    onScriptsInjected,
+    onScriptsRemoved,
   }
 }

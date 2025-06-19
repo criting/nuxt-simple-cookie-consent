@@ -103,6 +103,7 @@ Well, of course you will get a full working examples, no need to pressure yourse
 - [ ] DevTools integration
 - [ ] Built-in helpers for common script types
 - [ ] SSR-safe inline script support
+- [x] Events (`onConsentAccepted, onConsentDenied, onCategoryAccepted, onScriptsInjected, onScriptsRemoved`)
 
 ## 🙏 Contributing
 
