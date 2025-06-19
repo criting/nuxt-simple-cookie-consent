@@ -67,7 +67,9 @@ export default defineNuxtPlugin(() => {
         Object.entries(state.value).filter(([_, v]) => v === true),
       ) as Record<string, boolean>
 
-      injectScripts(config.scripts, acceptedCategories)
+      if (import.meta.client) {
+        injectScripts(config.scripts, acceptedCategories)
+      }
     }
   }
 })
