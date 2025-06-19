@@ -11,6 +11,8 @@ Built for developers who want full control over styling and behavior, without re
 > ⚠️ **Warning:** This module is currently under active development and **not production-ready**.  
 > Use at your own risk. APIs may change as the module evolves.
 
+[See the example in the playground](./playground) (uses Nuxt UI)
+
 ## 🚀 Features
 
 <!-- Highlight some of the features your module provide here -->
