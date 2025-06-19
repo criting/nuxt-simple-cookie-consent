@@ -1,7 +1,9 @@
+import type { GTMConsentField } from '../../types/gtm'
 import type { CookieScript } from '../../types/cookies'
 import { emitCookieConsentEvent } from '../composables/cookieConsentEvents'
+import { sendConsentToGTM } from './gtmConsent'
 
-export function injectScripts(scripts: CookieScript[], acceptedCategories: Record<string, boolean>) {
+export function injectScripts(scripts: CookieScript[], acceptedCategories: Record<string, boolean>, gtmConsentMapping?: Record<string, GTMConsentField>) {
   const injected = new Set<string>()
   const injectedCategories = new Set<string>()
 
@@ -46,6 +48,14 @@ export function injectScripts(scripts: CookieScript[], acceptedCategories: Recor
       .forEach(cat => injectedCategories.add(cat))
   }
 
+  if (import.meta.client && gtmConsentMapping) {
+    setTimeout(() => {
+      if (gtmConsentMapping) {
+        return sendConsentToGTM(acceptedCategories, gtmConsentMapping)
+      }
+    }, 300)
+  }
+
   for (const category of injectedCategories) {
     if (category && typeof category === 'string') {
       emitCookieConsentEvent({ type: 'categoryAccepted', category: category })
@@ -58,6 +68,9 @@ export function removeScripts(acceptedCategories: Record<string, boolean>) {
   const allScripts = document.querySelectorAll<HTMLScriptElement>('script[data-type="gdpr"]')
 
   allScripts.forEach((el) => {
+    const isGTM = el.getAttribute('src')?.includes('googletagmanager.com/gtag/js')
+    if (isGTM) return
+
     const rawCategories = el.getAttribute('data-categories') || ''
     const categories = rawCategories.split(',').map(c => c.trim()).filter(Boolean)
 

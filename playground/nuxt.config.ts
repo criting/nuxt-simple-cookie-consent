@@ -10,6 +10,11 @@ export default defineNuxtConfig({
     expiresInDays: 180,
     consentVersion: '1.0.0',
     cookieName: 'cookie_consent',
+    gtmConsentMapping: {
+      analytics: 'analytics_storage',
+      ads: 'ad_storage',
+      personalization: 'personalization_storage',
+    },
     categories: {
       analytics: {
         label: 'Analytics',

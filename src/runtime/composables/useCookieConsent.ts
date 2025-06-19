@@ -1,4 +1,5 @@
 import type { ModuleOptions } from '../../types/module'
+import { sendConsentToGTM } from '../utils/gtmConsent'
 import { injectScripts, removeScripts } from '../utils/scriptManager'
 import { onConsentAccepted,
   onConsentDenied,
@@ -76,7 +77,15 @@ export function useCookieConsent() {
 
     if (import.meta.client && Array.isArray(config.scripts)) {
       removeScripts(updated)
-      injectScripts(config.scripts, updated)
+      injectScripts(config.scripts, updated, config.gtmConsentMapping)
+    }
+
+    if (import.meta.client && config.gtmConsentMapping) {
+      setTimeout(() => {
+        if (config.gtmConsentMapping) {
+          return sendConsentToGTM(updated, config.gtmConsentMapping)
+        }
+      }, 300) // delay to ensure GTM script has time to load
     }
   }
 

@@ -59,7 +59,7 @@ export default defineNuxtPlugin(() => {
       ) as Record<string, boolean>
 
       if (import.meta.client) {
-        injectScripts(config.scripts, acceptedCategories)
+        injectScripts(config.scripts, acceptedCategories, config.gtmConsentMapping)
       }
     }
   }
