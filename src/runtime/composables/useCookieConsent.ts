@@ -5,6 +5,7 @@ import { computed } from '#imports'
 export interface CookieConsentCategory {
   label: string
   description?: string
+  required?: boolean
 }
 
 export interface CookieScript {
@@ -29,7 +30,10 @@ export function useCookieConsent() {
   })
 
   const hasUserMadeChoice = computed(() => {
-    return Object.values(state.value).some(v => v !== null)
+    return Object.entries(config.categories).some(([key, meta]) => {
+      if (meta.required) return false
+      return state.value[key] !== null && state.value[key] !== undefined
+    })
   })
 
   function acceptAll() {
@@ -41,11 +45,12 @@ export function useCookieConsent() {
   }
 
   function denyAll() {
-    const all = Object.keys(config.categories).reduce((acc, key) => {
-      acc[key] = false
+    const denied = Object.entries(config.categories).reduce((acc, [key, meta]) => {
+      acc[key] = meta.required ? true : false
       return acc
     }, {} as Record<string, boolean>)
-    updatePreferences(all)
+
+    updatePreferences(denied)
   }
 
   function acceptCategories(categories: string[]) {
@@ -57,9 +62,18 @@ export function useCookieConsent() {
   }
 
   function updatePreferences(newPrefs: Record<string, boolean>) {
-    state.value = newPrefs
+    const updated: Record<string, boolean> = {}
 
-    for (const [category, accepted] of Object.entries(newPrefs)) {
+    for (const [key, meta] of Object.entries(config.categories)) {
+      const isRequired = meta.required === true
+      const userValue = newPrefs[key]
+
+      updated[key] = isRequired ? true : !!userValue
+    }
+
+    state.value = updated
+
+    for (const [category, accepted] of Object.entries(updated)) {
       const scripts = config.scripts?.[category] || []
 
       if (accepted) {

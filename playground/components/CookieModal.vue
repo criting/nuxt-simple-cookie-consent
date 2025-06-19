@@ -55,7 +55,10 @@ defineExpose({
             {{ meta.description }}
           </p>
         </div>
-        <USwitch v-model="preferences[key]" />
+        <USwitch
+          v-model="preferences[key]"
+          :disabled="meta.required"
+        />
       </div>
     </template>
 

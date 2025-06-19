@@ -11,6 +11,12 @@ type ScriptConfig = {
   customContent?: string
 }
 
+type CategoryConfig = {
+  label: string
+  description: string
+  required?: boolean
+}
+
 export default defineNuxtPlugin(() => {
   const config = useRuntimeConfig().public.cookieConsent as {
     cookieName?: string
@@ -24,22 +30,32 @@ export default defineNuxtPlugin(() => {
     path: '/',
   })
 
-  const emptyPrefs = Object.keys(config.categories).reduce((acc, key) => {
-    acc[key] = null
+  const defaultPrefs = Object.entries(config.categories).reduce((acc, [key, meta]) => {
+    acc[key] = (meta as CategoryConfig).required ? true : null
     return acc
   }, {} as Record<string, boolean | null>)
 
-  const state = useState('cookieConsent', () => stored.value ?? emptyPrefs)
+  const state = useState('cookieConsent', () => stored.value ?? defaultPrefs)
 
   watchEffect(() => {
-    if (Object.values(state.value).some(v => v !== null)) {
-      stored.value = state.value as Record<string, boolean>
+    const current = { ...state.value }
+
+    for (const [key, meta] of Object.entries(config.categories)) {
+      const categoryMeta = meta as CategoryConfig
+      if (categoryMeta.required) current[key] = true
+    }
+
+    if (Object.values(current).some(v => v !== null)) {
+      stored.value = current as Record<string, boolean>
+      state.value = current
     }
   })
 
   if (import.meta.client) {
-    for (const [category, accepted] of Object.entries(state.value)) {
-      if (accepted === true) {
+    for (const [category, meta] of Object.entries(config.categories)) {
+      const categoryMeta = meta as CategoryConfig
+      const accepted = state.value[category]
+      if (categoryMeta.required || accepted === true) {
         const scripts = config.scripts?.[category] || []
         injectScripts(category, scripts)
       }

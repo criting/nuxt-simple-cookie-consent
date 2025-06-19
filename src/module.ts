@@ -4,6 +4,7 @@ import { defineNuxtModule, addPlugin, createResolver, addImportsDir } from '@nux
 export interface CookieConsentCategory {
   label: string
   description?: string
+  required?: boolean
 }
 
 export interface CookieScript {

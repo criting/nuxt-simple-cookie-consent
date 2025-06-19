@@ -12,6 +12,7 @@ export default defineNuxtConfig({
       analytics: {
         label: 'Analytics',
         description: 'Used to improve website performance.',
+        required: true,
       },
       ads: {
         label: 'Advertisement',
