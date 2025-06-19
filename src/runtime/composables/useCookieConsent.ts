@@ -15,6 +15,7 @@ export interface CookieScript {
   defer?: boolean
   type?: string
   customContent?: string
+  categories: string[]
 }
 
 export function useCookieConsent() {
@@ -85,15 +86,9 @@ export function useCookieConsent() {
     useCookie(cookieName).value = JSON.stringify(updated)
     useCookie('cookie_consent_timestamp').value = Date.now().toString()
 
-    for (const [category, accepted] of Object.entries(updated)) {
-      const scripts = config.scripts?.[category] || []
-
-      if (accepted) {
-        injectScripts(category, scripts)
-      }
-      else {
-        removeScripts(category)
-      }
+    if (import.meta.client && Array.isArray(config.scripts)) {
+      removeScripts(updated)
+      injectScripts(config.scripts, updated)
     }
   }
 

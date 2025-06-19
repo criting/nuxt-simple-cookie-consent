@@ -8,6 +8,7 @@ type ScriptConfig = {
   defer?: boolean
   type?: string
   customContent?: string
+  categories: string[]
 }
 
 type CategoryConfig = {
@@ -54,14 +55,19 @@ export default defineNuxtPlugin(() => {
     return stored.value ?? defaultPrefs
   })
 
-  if (import.meta.client) {
-    for (const [category, meta] of Object.entries(config.categories)) {
+  if (import.meta.client && Array.isArray(config.scripts)) {
+    const hasUserMadeChoice = Object.entries(config.categories).some(([key, meta]) => {
       const categoryMeta = meta as CategoryConfig
-      const accepted = state.value[category]
-      if (categoryMeta.required || accepted === true) {
-        const scripts = config.scripts?.[category] || []
-        injectScripts(category, scripts)
-      }
+      if (categoryMeta.required) return false
+      return state.value[key] !== null && state.value[key] !== undefined
+    })
+
+    if (hasUserMadeChoice) {
+      const acceptedCategories = Object.fromEntries(
+        Object.entries(state.value).filter(([_, v]) => v === true),
+      ) as Record<string, boolean>
+
+      injectScripts(config.scripts, acceptedCategories)
     }
   }
 })

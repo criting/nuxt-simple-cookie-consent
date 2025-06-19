@@ -14,6 +14,7 @@ export interface CookieScript {
   defer?: boolean
   type?: string
   customContent?: string
+  categories: string[]
 }
 
 export interface ModuleOptions {
