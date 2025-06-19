@@ -97,12 +97,12 @@ Well, of course you will get a full working examples, no need to pressure yourse
 ## 🛠 Planned Features
 - [x] Support multiple categories
 - [x] Script injection/removal based on category
-- [ ] Post-load callbacks
+- [x] Post-load callbacks
 - [x] Required categories (`required: true`)
 - [x] Consent expiration / auto-renew prompt
-- [ ] DevTools integration
-- [ ] Built-in helpers for common script types
-- [ ] SSR-safe inline script support
+- [x] DevTools integration
+- [x] Built-in helpers for common script types
+- [x] SSR-safe inline script support
 - [x] Events (`onConsentAccepted, onConsentDenied, onCategoryAccepted, onScriptsInjected, onScriptsRemoved`)
 - [x] Consent Versioning
 
