@@ -54,33 +54,6 @@ export default defineNuxtPlugin(() => {
     return stored.value ?? defaultPrefs
   })
 
-  // watchEffect(() => {
-  //   const current = { ...state.value }
-
-  //   for (const [key, meta] of Object.entries(config.categories)) {
-  //     const categoryMeta = meta as CategoryConfig
-  //     if (categoryMeta.required) current[key] = true
-  //   }
-
-  //   const hasChoice = Object.entries(config.categories).some(([key, meta]) => {
-  //     if ((meta as CategoryConfig).required) return false
-  //     return current[key] !== null && current[key] !== undefined
-  //   })
-
-  //   if (hasChoice && !wasExpired) {
-  //     stored.value = current as Record<string, boolean>
-  //     state.value = current
-
-  //     if (!timestampCookie.value) {
-  //       timestampCookie.value = Date.now()
-  //     }
-  //   }
-
-  //   if (hasChoice) {
-  //     state.value = current
-  //   }
-  // })
-
   if (import.meta.client) {
     for (const [category, meta] of Object.entries(config.categories)) {
       const categoryMeta = meta as CategoryConfig
