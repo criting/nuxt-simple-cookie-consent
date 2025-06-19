@@ -1,7 +1,7 @@
+import type { CookieConsentCategory, CookieScript } from '../../types/cookies'
 import { injectScripts, removeScripts } from '../utils/scriptManager'
 import { useCookie, useRuntimeConfig, useState } from '#app'
 import { computed } from '#imports'
-import type { CookieConsentCategory, CookieScript } from '../../types/cookies'
 
 export function useCookieConsent() {
   const config = useRuntimeConfig().public.cookieConsent as {
