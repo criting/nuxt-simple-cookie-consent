@@ -1,32 +1,18 @@
+import type { CookieConsentCategory } from '../types/cookies'
+import type { ModuleOptions } from '../types/module'
 import { injectScripts } from './utils/scriptManager'
 import { defineNuxtPlugin, useCookie, useRuntimeConfig, useState } from '#app'
 
-type ScriptConfig = {
-  id: string
-  src?: string
-  async?: boolean
-  defer?: boolean
-  type?: string
-  customContent?: string
-  categories: string[]
-}
-
-type CategoryConfig = {
-  label: string
-  description: string
-  required?: boolean
-}
-
 export default defineNuxtPlugin(() => {
-  const config = useRuntimeConfig().public.cookieConsent as {
-    cookieName?: string
-    categories: Record<string, unknown>
-    scripts?: Record<string, ScriptConfig[]>
-    expiresInDays?: number
-  }
+  const config = useRuntimeConfig().public.cookieConsent as ModuleOptions
   const cookieName = config.cookieName || 'cookie_consent'
 
   const stored = useCookie<Record<string, boolean> | null>(cookieName, {
+    sameSite: 'lax',
+    path: '/',
+  })
+
+  const versionCookie = useCookie<string | null>('cookie_consent_version', {
     sameSite: 'lax',
     path: '/',
   })
@@ -40,7 +26,7 @@ export default defineNuxtPlugin(() => {
   const now = Date.now()
 
   const defaultPrefs = Object.entries(config.categories).reduce((acc, [key, meta]) => {
-    acc[key] = (meta as CategoryConfig).required ? true : null
+    acc[key] = (meta as CookieConsentCategory).required ? true : null
     return acc
   }, {} as Record<string, boolean | null>)
 
@@ -48,8 +34,13 @@ export default defineNuxtPlugin(() => {
     ? now - timestampCookie.value > expiresInMs
     : false
 
+  const isOutdatedVersion = versionCookie.value !== config.consentVersion
+
   const state = useState('cookieConsent', () => {
-    if (isExpired) {
+    if (isExpired || isOutdatedVersion) {
+      stored.value = null
+      timestampCookie.value = null
+      versionCookie.value = null
       return defaultPrefs
     }
     return stored.value ?? defaultPrefs
@@ -57,7 +48,7 @@ export default defineNuxtPlugin(() => {
 
   if (import.meta.client && Array.isArray(config.scripts)) {
     const hasUserMadeChoice = Object.entries(config.categories).some(([key, meta]) => {
-      const categoryMeta = meta as CategoryConfig
+      const categoryMeta = meta as CookieConsentCategory
       if (categoryMeta.required) return false
       return state.value[key] !== null && state.value[key] !== undefined
     })
