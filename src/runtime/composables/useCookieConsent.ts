@@ -7,7 +7,7 @@ export function useCookieConsent() {
   const config = useRuntimeConfig().public.cookieConsent as {
     cookieName?: string
     categories: Record<string, CookieConsentCategory>
-    scripts?: Record<string, CookieScript[]>
+    scripts?: CookieScript[]
     expiresInDays?: number
   }
   const cookieName = config.cookieName || 'cookie_consent'

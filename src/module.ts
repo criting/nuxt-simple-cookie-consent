@@ -4,7 +4,7 @@ import type { CookieConsentCategory, CookieScript } from './types/cookies'
 
 export interface ModuleOptions {
   categories: Record<string, CookieConsentCategory>
-  scripts: Record<string, CookieScript[]>
+  scripts: CookieScript[]
   cookieName?: string
   expiresInDays?: number
 }
@@ -16,7 +16,7 @@ export default defineNuxtModule<ModuleOptions>({
   },
   defaults: {
     categories: {},
-    scripts: {},
+    scripts: [],
     cookieName: 'cookie_consent',
   },
   setup(options, nuxt) {
