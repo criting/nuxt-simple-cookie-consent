@@ -7,6 +7,7 @@ export default defineNuxtConfig({
   css: ['~/assets/css/main.css'],
   compatibilityDate: '2025-03-24',
   cookieConsent: {
+    expiresInDays: 180,
     cookieName: 'cookie_consent',
     categories: {
       analytics: {

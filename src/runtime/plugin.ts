@@ -1,6 +1,5 @@
 import { injectScripts } from './utils/scriptManager'
 import { defineNuxtPlugin, useCookie, useRuntimeConfig, useState } from '#app'
-import { watchEffect } from '#imports'
 
 type ScriptConfig = {
   id: string
@@ -22,6 +21,7 @@ export default defineNuxtPlugin(() => {
     cookieName?: string
     categories: Record<string, unknown>
     scripts?: Record<string, ScriptConfig[]>
+    expiresInDays?: number
   }
   const cookieName = config.cookieName || 'cookie_consent'
 
@@ -30,25 +30,28 @@ export default defineNuxtPlugin(() => {
     path: '/',
   })
 
+  const timestampCookie = useCookie<number | null>('cookie_consent_timestamp', {
+    sameSite: 'lax',
+    path: '/',
+  })
+
+  const expiresInMs = (config.expiresInDays ?? 180) * 24 * 60 * 60 * 1000
+  const now = Date.now()
+
   const defaultPrefs = Object.entries(config.categories).reduce((acc, [key, meta]) => {
     acc[key] = (meta as CategoryConfig).required ? true : null
     return acc
   }, {} as Record<string, boolean | null>)
 
-  const state = useState('cookieConsent', () => stored.value ?? defaultPrefs)
+  const isExpired = timestampCookie.value
+    ? now - timestampCookie.value > expiresInMs
+    : false
 
-  watchEffect(() => {
-    const current = { ...state.value }
-
-    for (const [key, meta] of Object.entries(config.categories)) {
-      const categoryMeta = meta as CategoryConfig
-      if (categoryMeta.required) current[key] = true
+  const state = useState('cookieConsent', () => {
+    if (isExpired) {
+      return defaultPrefs
     }
-
-    if (Object.values(current).some(v => v !== null)) {
-      stored.value = current as Record<string, boolean>
-      state.value = current
-    }
+    return stored.value ?? defaultPrefs
   })
 
   if (import.meta.client) {

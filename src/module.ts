@@ -20,6 +20,7 @@ export interface ModuleOptions {
   categories: Record<string, CookieConsentCategory>
   scripts: Record<string, CookieScript[]>
   cookieName?: string
+  expiresInDays?: number
 }
 
 export default defineNuxtModule<ModuleOptions>({

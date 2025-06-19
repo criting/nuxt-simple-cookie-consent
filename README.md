@@ -93,7 +93,7 @@ Well, of course you will get a full working examples, no need to pressure yourse
 - [x] Script injection/removal based on category
 - [ ] Post-load callbacks
 - [x] Required categories (`required: true`)
-- [ ] Consent expiration / auto-renew prompt
+- [x] Consent expiration / auto-renew prompt
 - [ ] DevTools integration
 - [ ] Built-in helpers for common script types
 - [ ] SSR-safe inline script support
