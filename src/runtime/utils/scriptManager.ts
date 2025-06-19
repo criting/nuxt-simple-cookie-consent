@@ -1,3 +1,5 @@
+import { emitCookieConsentEvent } from '../composables/cookieConsentEvents'
+
 type ScriptConfig = {
   id: string
   src?: string
@@ -10,6 +12,7 @@ type ScriptConfig = {
 
 export function injectScripts(scripts: ScriptConfig[], acceptedCategories: Record<string, boolean>) {
   const injected = new Set<string>()
+  const injectedCategories = new Set<string>()
 
   for (const script of scripts) {
     if (!script.categories.some(cat => acceptedCategories[cat])) continue
@@ -32,18 +35,35 @@ export function injectScripts(scripts: ScriptConfig[], acceptedCategories: Recor
 
     document.head.appendChild(el)
     injected.add(script.id)
+    script.categories
+      .filter(cat => acceptedCategories[cat])
+      .forEach(cat => injectedCategories.add(cat))
+  }
+
+  for (const category of injectedCategories) {
+    if (category && typeof category === 'string') {
+      emitCookieConsentEvent({ type: 'categoryAccepted', category: category })
+    }
   }
 }
 
 export function removeScripts(acceptedCategories: Record<string, boolean>) {
+  const removedCategories = new Set<string>()
   const allScripts = document.querySelectorAll<HTMLScriptElement>('script[data-type="gdpr"]')
 
   allScripts.forEach((el) => {
-    const categories = (el.getAttribute('data-categories') || '').split(',')
+    const rawCategories = el.getAttribute('data-categories') || ''
+    const categories = rawCategories.split(',').map(c => c.trim()).filter(Boolean)
+
     const stillAllowed = categories.some(cat => acceptedCategories[cat])
 
     if (!stillAllowed) {
       el.remove()
+      categories.forEach(cat => removedCategories.add(cat))
     }
   })
+
+  for (const category of removedCategories) {
+    emitCookieConsentEvent({ type: 'scriptsRemoved', category: category })
+  }
 }

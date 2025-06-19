@@ -1,14 +1,41 @@
-<script setup>
+<script setup lang="ts">
 const {
   acceptAll,
   denyAll,
   hasUserMadeChoice,
   isConsentExpired,
+  onConsentAccepted,
+  onConsentDenied,
+  onCategoryAccepted,
+  onScriptsInjected,
+  onScriptsRemoved,
 } = useCookieConsent()
 
-const showBanner = computed(() =>
-  !hasUserMadeChoice.value || isConsentExpired.value,
-)
+onConsentAccepted(() => {
+  console.log('[HOOK] Consent accepted')
+})
+
+onConsentDenied(() => {
+  console.log('[HOOK] Consent denied')
+})
+
+onCategoryAccepted((category) => {
+  console.log('[HOOK] Category accepted:', category)
+})
+
+onScriptsInjected((category) => {
+  console.log('[HOOK] Scripts injected for category:', category)
+})
+
+onScriptsRemoved((category) => {
+  console.log('[HOOK] Scripts removed for category:', category)
+})
+
+const showBanner = ref(!hasUserMadeChoice.value || isConsentExpired.value)
+watch([hasUserMadeChoice, isConsentExpired], () => {
+  showBanner.value = !hasUserMadeChoice.value || isConsentExpired.value
+})
+
 const emit = defineEmits(['open-modal'])
 
 function handleOpenModal() {
@@ -46,7 +73,7 @@ function handleDeny() {
       class="flex gap-2"
     >
       <UButton
-        color="gray"
+        color="neutral"
         @click="handleDeny"
       >
         Deny
