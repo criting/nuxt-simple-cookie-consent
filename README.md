@@ -10,9 +10,6 @@
 A simple, headless, and fully customizable cookie consent module for Nuxt 3.  
 Built for developers who want full control over styling and behavior, without relying on bloated third-party libraries.
 
-> ⚠️ **Warning:** This module is currently under active development and **not production-ready**.  
-> Use at your own risk. APIs may change as the module evolves.
-
 [See the example in the playground](./playground) (uses Nuxt UI)
 
 ## 🚀 Features
@@ -151,8 +148,6 @@ Well, of course you will get a full working examples, no need to pressure yourse
 Pull requests, issues, and suggestions are welcome!
 
 If you find a bug or want to propose a feature, open an issue or a PR.
-
-> ⚠️ This module is still **in development** — expect breaking changes until stable release.
 
 <details>
   <summary>Local development</summary>
