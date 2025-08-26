@@ -15,6 +15,7 @@ Built for developers who want full control over styling and behavior, without re
 ## 🚀 Features
 
 <!-- Highlight some of the features your module provide here -->
+
 - ✅ **Headless design** – Full control over all UI/UX. The module only provides logic and script handling.
 - ✅ **Group scripts into multiple categories** – Organize by purpose (e.g., `analytics`, `ads`, or both).
 - ✅ **Required categories** – Mark categories as `required: true` to always enable them and prevent opt-out.
@@ -39,7 +40,7 @@ Built for developers who want full control over styling and behavior, without re
 Install the module to your Nuxt application with one command:
 
 ```bash
-npm install nuxt-simple-cookie-consent
+npx nuxi@latest module add nuxt-simple-cookie-consent
 ```
 
 That's it! You can now use nuxt-simple-cookie-consent in your Nuxt app ✨
@@ -55,12 +56,12 @@ export default defineNuxtConfig({
       analytics: {
         label: 'Analytics',
         description: 'Used to improve website performance.',
-        required: false,
+        required: false
       },
       ads: {
         label: 'Advertisement',
-        description: 'Used for ad personalization.',
-      },
+        description: 'Used for ad personalization.'
+      }
     },
     scripts: [
       {
@@ -68,12 +69,12 @@ export default defineNuxtConfig({
         src: 'https://www.googletagmanager.com/gtag/js?id=GA_ID',
         async: true,
         defer: true,
-        categories: ['analytics', 'ads'],
+        categories: ['analytics', 'ads']
       },
       {
         id: 'ads',
         src: 'https://ads.example.com/script.js',
-        categories: ['ads'],
+        categories: ['ads']
       },
       {
         id: 'ga',
@@ -84,7 +85,7 @@ export default defineNuxtConfig({
           gtag('js', new Date());
           gtag('config', 'GA_ID');
         `,
-        categories: ['analytics'],
+        categories: ['analytics']
       },
       {
         id: 'facebook',
@@ -93,11 +94,11 @@ export default defineNuxtConfig({
                     height="1" width="1" style="display:none"></iframe>
           `,
         categories: ['ads'],
-        src: '',
-      },
-    ],
-  },
-})
+        src: ''
+      }
+    ]
+  }
+});
 ```
 
 ## Usage
@@ -113,7 +114,7 @@ const {
   denyAll,
   acceptCategories,
   hasUserMadeChoice
-} = useCookieConsent()
+} = useCookieConsent();
 ```
 
 Build your UI using Nuxt UI, Tailwind, or anything else.  
@@ -132,6 +133,7 @@ This one gives you **just the logic** — you handle the rest with your own desi
 Well, of course you will get a full working examples, no need to pressure yourself!
 
 ## 🛠 Planned Features
+
 - [x] Support multiple categories
 - [x] Script injection/removal based on category
 - [x] Post-load callbacks
@@ -178,16 +180,13 @@ If you find a bug or want to propose a feature, open an issue or a PR.
 
 </details>
 
-
 <!-- Badges -->
+
 [npm-version-src]: https://img.shields.io/npm/v/nuxt-simple-cookie-consent/latest.svg?style=flat&colorA=020420&colorB=00DC82
 [npm-version-href]: https://npmjs.com/package/nuxt-simple-cookie-consent
-
 [npm-downloads-src]: https://img.shields.io/npm/dm/nuxt-simple-cookie-consent.svg?style=flat&colorA=020420&colorB=00DC82
 [npm-downloads-href]: https://npm.chart.dev/nuxt-simple-cookie-consent
-
 [license-src]: https://img.shields.io/npm/l/nuxt-simple-cookie-consent.svg?style=flat&colorA=020420&colorB=00DC82
 [license-href]: https://npmjs.com/package/nuxt-simple-cookie-consent
-
 [nuxt-src]: https://img.shields.io/badge/Nuxt-020420?logo=nuxt.js
 [nuxt-href]: https://nuxt.com
