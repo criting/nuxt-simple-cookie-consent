@@ -5,6 +5,7 @@
 [![License][license-src]][license-href]
 [![Nuxt][nuxt-src]][nuxt-href]
 
+![Banner](docs/banner.png)
 
 A simple, headless, and fully customizable cookie consent module for Nuxt 3.  
 Built for developers who want full control over styling and behavior, without relying on bloated third-party libraries.
