@@ -12,9 +12,19 @@ import { computed } from '#imports'
 export function useCookieConsent() {
   const config = useRuntimeConfig().public.cookieConsent as ModuleOptions
   const cookieName = config.cookieName || 'cookie_consent'
+  const expiresInDays = config.expiresInDays ?? 180
+  const maxAgeInSeconds = expiresInDays * 24 * 60 * 60
+  const expiresInMs = expiresInDays * 24 * 60 * 60 * 1000
+  const expiresDate = new Date(Date.now() + expiresInMs)
 
-  const consentTimestamp = useCookie<number | null>('cookie_consent_timestamp')
-  const expiresInMs = (config.expiresInDays ?? 180) * 24 * 60 * 60 * 1000
+  const cookieOptions = {
+    sameSite: 'lax' as const,
+    maxAge: maxAgeInSeconds,
+    expires: expiresDate,
+    path: '/'
+  }
+
+  const consentTimestamp = useCookie<number | null>('cookie_consent_timestamp', cookieOptions)
 
   const isConsentExpired = computed(() => {
     return consentTimestamp.value
@@ -23,7 +33,7 @@ export function useCookieConsent() {
   })
 
   const state = useState<Record<string, boolean>>('cookieConsent', () => {
-    return useCookie<Record<string, boolean>>(cookieName).value || {}
+    return useCookie<Record<string, boolean>>(cookieName, cookieOptions).value || {}
   })
 
   const hasUserMadeChoice = computed(() => {
@@ -71,9 +81,9 @@ export function useCookieConsent() {
     }
 
     state.value = updated
-    useCookie(cookieName).value = JSON.stringify(updated)
-    useCookie('cookie_consent_timestamp').value = Date.now().toString()
-    useCookie('cookie_consent_version').value = config.consentVersion || '1'
+    useCookie(cookieName, cookieOptions).value = JSON.stringify(updated)
+    useCookie('cookie_consent_timestamp', cookieOptions).value = Date.now().toString()
+    useCookie('cookie_consent_version', cookieOptions).value = config.consentVersion || '1'
 
     if (import.meta.client && Array.isArray(config.scripts)) {
       removeScripts(updated)
