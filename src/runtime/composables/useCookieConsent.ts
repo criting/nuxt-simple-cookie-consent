@@ -77,13 +77,13 @@ export function useCookieConsent() {
 
     if (import.meta.client && Array.isArray(config.scripts)) {
       removeScripts(updated)
-      injectScripts(config.scripts, updated, config.gtmConsentMapping)
+      injectScripts(config.scripts, updated, config.gtmConsentMapping, config?.debug || false)
     }
 
     if (import.meta.client && config.gtmConsentMapping) {
       setTimeout(() => {
         if (config.gtmConsentMapping) {
-          return sendConsentToGTM(updated, config.gtmConsentMapping)
+          return sendConsentToGTM(updated, config.gtmConsentMapping, !!config.debug)
         }
       }, 300) // delay to ensure GTM script has time to load
     }

@@ -13,7 +13,11 @@ declare global {
     gtag?: GtagFunction
   }
 }
-export function sendConsentToGTM(preferences: Record<string, boolean>, mapping: Record<string, GTMConsentField>) {
+export function sendConsentToGTM(
+  preferences: Record<string, boolean>,
+  mapping: Record<string, GTMConsentField>,
+  debug = false,
+) {
   const gtmScript = document.querySelector('script[src*="googletagmanager.com/gtag/js"]')
   if (!gtmScript || typeof window.gtag !== 'function') return
 
@@ -27,5 +31,8 @@ export function sendConsentToGTM(preferences: Record<string, boolean>, mapping: 
 
   window.gtag('consent', 'update', consent)
 
-  console.log('[DEBUG] Sending GTM consent update:', consent)
+  if (debug) {
+    // only log when explicitly enabled via config.debug
+    console.log('[DEBUG] Sending GTM consent update:', consent)
+  }
 }

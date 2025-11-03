@@ -8,4 +8,6 @@ export interface ModuleOptions {
   expiresInDays?: number
   consentVersion?: string
   gtmConsentMapping?: Record<string, GTMConsentField>
+  // when true, debug logs (like GTM consent payload) are printed to console
+  debug?: boolean
 }
