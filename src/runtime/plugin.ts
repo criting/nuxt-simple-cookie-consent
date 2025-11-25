@@ -6,19 +6,30 @@ import { defineNuxtPlugin, useCookie, useRuntimeConfig, useState } from '#app'
 export default defineNuxtPlugin(() => {
   const config = useRuntimeConfig().public.cookieConsent as ModuleOptions
   const cookieName = config.cookieName || 'cookie_consent'
+  const expiresInDays = config.expiresInDays ?? 180
+  const maxAgeInSeconds = expiresInDays * 24 * 60 * 60
+  const expiresDate = new Date(Date.now() + maxAgeInSeconds * 1000)
 
   const stored = useCookie<Record<string, boolean> | null>(cookieName, {
     sameSite: 'lax',
-    path: '/',
+    maxAge: maxAgeInSeconds,
+    expires: expiresDate,
+    path: '/'
+  }, {
+    watch: true
   })
 
   const versionCookie = useCookie<string | null>('cookie_consent_version', {
     sameSite: 'lax',
+    maxAge: maxAgeInSeconds,
+    expires: expiresDate,
     path: '/',
   })
 
   const timestampCookie = useCookie<number | null>('cookie_consent_timestamp', {
     sameSite: 'lax',
+    maxAge: maxAgeInSeconds,
+    expires: expiresDate,
     path: '/',
   })
 
