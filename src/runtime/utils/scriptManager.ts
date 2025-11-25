@@ -3,7 +3,12 @@ import type { CookieScript } from '../../types/cookies'
 import { emitCookieConsentEvent } from '../composables/cookieConsentEvents'
 import { sendConsentToGTM } from './gtmConsent'
 
-export function injectScripts(scripts: CookieScript[], acceptedCategories: Record<string, boolean>, gtmConsentMapping?: Record<string, GTMConsentField>) {
+export function injectScripts(
+  scripts: CookieScript[],
+  acceptedCategories: Record<string, boolean>,
+  gtmConsentMapping?: Record<string, GTMConsentField>,
+  gtmDebug = false,
+) {
   const injected = new Set<string>()
   const injectedCategories = new Set<string>()
 
@@ -51,7 +56,7 @@ export function injectScripts(scripts: CookieScript[], acceptedCategories: Recor
   if (import.meta.client && gtmConsentMapping) {
     setTimeout(() => {
       if (gtmConsentMapping) {
-        return sendConsentToGTM(acceptedCategories, gtmConsentMapping)
+        return sendConsentToGTM(acceptedCategories, gtmConsentMapping, gtmDebug)
       }
     }, 300)
   }
