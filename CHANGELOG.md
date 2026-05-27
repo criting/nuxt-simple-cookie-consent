@@ -1,6 +1,10 @@
 # Changelog
 
 
+## v1.1.11
+
+[compare changes](https://github.com/criting/nuxt-simple-cookie-consent/compare/v1.1.10...v1.1.11)
+
 ## v1.1.10
 
 [compare changes](https://github.com/criting/nuxt-simple-cookie-consent/compare/v1.1.9...v1.1.10)
