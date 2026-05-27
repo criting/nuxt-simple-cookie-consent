@@ -14,9 +14,8 @@ export default defineNuxtPlugin(() => {
     sameSite: 'lax',
     maxAge: maxAgeInSeconds,
     expires: expiresDate,
-    path: '/'
-  }, {
-    watch: true
+    path: '/',
+    watch: true,
   })
 
   const versionCookie = useCookie<string | null>('cookie_consent_version', {
@@ -54,7 +53,26 @@ export default defineNuxtPlugin(() => {
       versionCookie.value = null
       return defaultPrefs
     }
-    return stored.value ?? defaultPrefs
+
+    const raw = stored.value as unknown
+    if (!raw || typeof raw !== 'object' || Array.isArray(raw)) {
+      stored.value = null
+      timestampCookie.value = null
+      versionCookie.value = null
+      return defaultPrefs
+    }
+
+    const storedPrefs = raw as Record<string, unknown>
+    return Object.entries(config.categories).reduce((acc, [key, meta]) => {
+      const categoryMeta = meta as CookieConsentCategory
+      const value = storedPrefs[key]
+      acc[key] = categoryMeta.required
+        ? true
+        : value === undefined || value === null
+          ? null
+          : !!value
+      return acc
+    }, {} as Record<string, boolean | null>)
   })
 
   if (import.meta.client && Array.isArray(config.scripts)) {

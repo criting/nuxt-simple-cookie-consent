@@ -21,7 +21,7 @@ export function useCookieConsent() {
     sameSite: 'lax' as const,
     maxAge: maxAgeInSeconds,
     expires: expiresDate,
-    path: '/'
+    path: '/',
   }
 
   const consentTimestamp = useCookie<number | null>('cookie_consent_timestamp', cookieOptions)
@@ -32,8 +32,18 @@ export function useCookieConsent() {
       : false
   })
 
+  const preferencesCookie = useCookie<Record<string, boolean> | null>(cookieName, cookieOptions)
+
   const state = useState<Record<string, boolean>>('cookieConsent', () => {
-    return useCookie<Record<string, boolean>>(cookieName, cookieOptions).value || {}
+    const raw = preferencesCookie.value as unknown
+
+    if (!raw || typeof raw !== 'object' || Array.isArray(raw)) {
+      return {}
+    }
+
+    return Object.fromEntries(
+      Object.entries(raw as Record<string, unknown>).map(([key, value]) => [key, !!value]),
+    )
   })
 
   const hasUserMadeChoice = computed(() => {
@@ -81,8 +91,8 @@ export function useCookieConsent() {
     }
 
     state.value = updated
-    useCookie(cookieName, cookieOptions).value = JSON.stringify(updated)
-    useCookie('cookie_consent_timestamp', cookieOptions).value = Date.now().toString()
+    preferencesCookie.value = updated
+    useCookie<number | null>('cookie_consent_timestamp', cookieOptions).value = Date.now()
     useCookie('cookie_consent_version', cookieOptions).value = config.consentVersion || '1'
 
     if (import.meta.client && Array.isArray(config.scripts)) {
