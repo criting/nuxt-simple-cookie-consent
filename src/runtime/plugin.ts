@@ -4,7 +4,7 @@ import { injectScripts } from './utils/scriptManager'
 import { defineNuxtPlugin, useCookie, useRuntimeConfig, useState } from '#app'
 
 export default defineNuxtPlugin(() => {
-  const config = useRuntimeConfig().public.cookieConsent as ModuleOptions
+  const config = useRuntimeConfig().public.cookieConsent as unknown as ModuleOptions
   const cookieName = config.cookieName || 'cookie_consent'
   const expiresInDays = config.expiresInDays ?? 180
   const maxAgeInSeconds = expiresInDays * 24 * 60 * 60

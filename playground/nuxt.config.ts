@@ -1,4 +1,4 @@
-export default defineNuxtConfig({
+export default {
   modules: [
     '../src/module',
     '@nuxt/ui',
@@ -61,4 +61,4 @@ export default defineNuxtConfig({
       },
     ],
   },
-})
+}

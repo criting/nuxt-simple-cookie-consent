@@ -14,8 +14,9 @@ export default defineNuxtModule<ModuleOptions>({
   },
   setup(options, nuxt) {
     const resolver = createResolver(import.meta.url)
+    const publicRuntimeConfig = nuxt.options.runtimeConfig.public as Record<string, unknown>
 
-    nuxt.options.runtimeConfig.public.cookieConsent = {
+    publicRuntimeConfig.cookieConsent = {
       ...options,
       cookieName: options.cookieName ?? 'cookie_consent',
     }
