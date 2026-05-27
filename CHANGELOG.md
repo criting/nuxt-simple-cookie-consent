@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v1.1.12
+
+[compare changes](https://github.com/criting/nuxt-simple-cookie-consent/compare/v1.1.11...v1.1.12)
+
+### 🏡 Chore
+
+- **nuxt4:** Update playground deps and compatibility typing ([6920c6a](https://github.com/criting/nuxt-simple-cookie-consent/commit/6920c6a))
+
+### ❤️ Contributors
+
+- Criting ([@criting](https://github.com/criting))
+
 ## v1.1.11
 
 [compare changes](https://github.com/criting/nuxt-simple-cookie-consent/compare/v1.1.10...v1.1.11)
