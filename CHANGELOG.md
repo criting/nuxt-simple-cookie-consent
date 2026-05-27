@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v1.1.10
+
+[compare changes](https://github.com/criting/nuxt-simple-cookie-consent/compare/v1.1.9...v1.1.10)
+
+### 🩹 Fixes
+
+- **cookie:** Stop manual stringify and harden cookie payload handling ([121bf14](https://github.com/criting/nuxt-simple-cookie-consent/commit/121bf14))
+
+### ❤️ Contributors
+
+- Criting ([@criting](https://github.com/criting))
+
 ## v1.1.9
 
 [compare changes](https://github.com/criting/nuxt-simple-cookie-consent/compare/1.1.8...v1.1.9)
